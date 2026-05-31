@@ -1,0 +1,36 @@
+name: DevSecOps IaC Security Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  security-scan:
+    name: Infrastructure Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Init & Validate
+        run: |
+          cd terraform
+          terraform init
+          terraform validate
+
+      # This runs the Checkov security tool against our code
+      - name: Run Checkov Security Scanner
+        uses: bridgecrewio/checkov-action@master
+        with:
+          framework: terraform
+          directory: terraform/
+          soft_fail: false
+          output_format: cli  # <-- Add this line to get the human-readable text report!
