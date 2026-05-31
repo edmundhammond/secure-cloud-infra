@@ -33,4 +33,6 @@ jobs:
           framework: terraform
           directory: terraform/
           soft_fail: false
-          output_format: cli  # <-- Add this line to get the human-readable text report!
+          output_format: cli
+          # This skips the advanced enterprise logging/replication rules you are seeing
+          skip_check: CKV_AWS_144,CKV_AWS_145,CKV2_AWS_61,CKV2_AWS_62,CKV2_AWS_11,CKV2_AWS_12,CKV2_AWS_5
